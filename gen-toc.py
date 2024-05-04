@@ -23,7 +23,26 @@ def process_text(raw_text):
     return (to_inject, process)
 
 def count_sharp(text):
-    pass
+    return text.count("#")
+
+def gen_toc(text):
+    default_sharp = 2
+    
+    toc = []
+    num = 1
+    for line in text:
+        des = line.split('#')[-1].strip()
+        order = count_sharp(line) - default_sharp
+        if order == 0:
+            content = '[' + des + ']'
+            des = des.lower().split(' ')
+            des = '-'.join(des)
+            content = content + '(#' +  des + ')'
+            toc.append(str(num) + '. ' + content)
+            num += 1
+        else:
+            pass
+    return toc
 
 def main():
     parser = argparse.ArgumentParser(description="Create TOC for Markdown")
@@ -33,6 +52,14 @@ def main():
     with open(args.file_path, "r") as file:
         (to_inject, text) = process_text(file.read())
     
-    print(text)
+    toc = gen_toc(text)
+    with open(args.file_path, "r") as f:
+        contents = f.readlines()
+
+    contents.insert(to_inject, '\n\n'.join(toc))
+
+    with open(args.file_path, "w") as f:
+        contents = "".join(contents)
+        f.write(contents)
 
 main()

@@ -1,14 +1,22 @@
-[//]: <> (Ignore)
 # Algorithm 
 
-[//]: <> (Ignore)
-## Table of Contents
-[//]: <> (Inject)
+<!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
+- [Algorithm](#algorithm)
+  - [Sparse Table](#sparse-table)
+  - [Graphs](#graphs)
+    - [BF Shortest Path](#bf-shortest-path)
+    - [Djikstra Shortest Path](#djikstra-shortest-path)
+
+<!-- TOC end -->
+
+<!-- TOC --><a name="sparse-table"></a>
 ## Sparse Table
 
+<!-- TOC --><a name="graphs"></a>
 ## Graphs
 
+<!-- TOC --><a name="bf-shortest-path"></a>
 ### BF Shortest Path
 
 - Change LIM
@@ -47,4 +55,5 @@ while (!toVisit.empty()) {
 }
 ```
 
+<!-- TOC --><a name="djikstra-shortest-path"></a>
 ### Djikstra Shortest Path
