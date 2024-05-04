@@ -1,16 +1,35 @@
-# Algorithm 
+# Snippet
 
-<!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
+## Quick type
 
-- [Algorithm](#algorithm)
-  - [Sparse Table](#sparse-table)
-  - [Graphs](#graphs)
-    - [BF Shortest Path](#bf-shortest-path)
-    - [Djikstra Shortest Path](#djikstra-shortest-path)
+```
+#define FOR(i, L ,R) for (int i = L; i < R; i++)
+#define FOR0(i, N) for (int i = 0; i < N; i++)
+#define endl "\n"
+```
 
-<!-- TOC end -->
+```
+#ifdef LOCALONLY
+    static int _tc_num = 1;
+    cout << "Testcase " << _tc_num << ":\n";
+    _tc_num++;
+#endif
+```
 
-<!-- TOC --><a name="sparse-table"></a>
+## Debug
+
+```
+void Print_Arr(int64_t* _n, int _l) {
+    for (int i = 0; i < _l; i++) {
+        cout << _n[i] << " ";
+    }
+    cout << endl;
+}
+int currTC = 0;
+```
+
+# Algorithm - Basic
+
 ## Sparse Table
 ```
 #define NC 250010
@@ -45,16 +64,11 @@ int lcm_query(int l, int r) {
 }
 ```
 
-<!-- TOC --><a name="graphs"></a>
-## Graphs
+# Algorithm - Graphs
 
-<!-- TOC --><a name="bf-shortest-path"></a>
+## Shortest Path
+
 ### BF Shortest Path
-
-- Change LIM
-- Change number in for loop
-- Change mask
-- Change MOVES
 
 ```
 #define LIM 1000000000LL
@@ -87,5 +101,98 @@ while (!toVisit.empty()) {
 }
 ```
 
-<!-- TOC --><a name="djikstra-shortest-path"></a>
 ### Djikstra Shortest Path
+```
+using pii = pair<int, int>;
+#define LIM 1000000
+typedef struct comp {
+    bool operator() (pii& lhs, pii& rhs) {
+        return lhs.second > rhs.second;
+    }
+} comp;
+    
+
+// n : list length
+// list : adj list
+
+vector<int> estimated(n, LIM);
+estimated[k - 1] = 0;
+priority_queue<pii, vector<pii>, comp> pq;
+pq.push(make_pair(k - 1, 0));
+while (!pq.empty()) {
+    auto p = pq.top();
+    pq.pop();
+    if (estimated[p.first] < p.second) {
+        continue;
+    }
+    for (auto& v : list[p.first]) {
+        if (p.second + v.second < estimated[v.first]) {
+            estimated[v.first] = p.second + v.second;
+            pq.push(make_pair(v.first, estimated[v.first]));
+        }
+    }
+}
+```
+
+### All pair shortest path
+```
+// graph: edge list
+n = graph.size();
+vector<vector<int>> distance(n, vector<int>(n, LIM));
+for (int i = 0; i < n; i++) {
+    for (int j = 0; j < graph[i].size(); j++) {
+        int node = graph[i][j];
+        distance[i][node] = 1;
+        distance[node][i] = 1;
+    }
+}
+for (int k = 0; k < n; k++) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (distance[i][k] + distance[k][j] < distance[i][j]) {
+                distance[i][j] = distance[i][k] + distance[k][j];
+            }
+        }
+    }
+}
+```
+
+### Minimum Spanning Tree
+```
+using pii = pair<int, int>;
+typedef struct comp {
+    // first = node
+    // second = weight
+    bool operator() (pii& lhs, pii& rhs) {
+        if (lhs.second != rhs.second) {
+            return lhs.second > rhs.second;
+        } else {
+            return lhs.first > rhs.first;
+        }
+    }
+} comp;
+
+// mapping : adj list with element
+// node : {other_node, weight}
+// MST using Prim
+
+priority_queue<pii, vector<pii>, comp> pq;
+vector<int> visited(points.size(), 0);
+visited[0] = 1;
+for (auto& p : mapping[0]) {
+    pq.push(p);
+}
+int res = 0;
+while (!pq.empty()) {
+    auto p = pq.top();
+    pq.pop();
+    if (visited[p.first] == 1) continue;
+    visited[p.first] = 1;
+    res += p.second;
+    for (auto& v : mapping[p.first]) {
+        if (visited[v.first] == 0) {
+            pq.push(v);
+        }
+    }
+}
+```
