@@ -12,6 +12,38 @@
 
 <!-- TOC --><a name="sparse-table"></a>
 ## Sparse Table
+```
+#define NC 250010
+#define MAX_EXPO 20
+#define FOR(i, L ,R) for (int i = L; i < R; i++)
+#define FOR0(i, N) for (int i = 0; i < N; i++)
+
+int64_t sparse_table[MAX_EXPO][NC];
+
+void gen_sparse_table() {
+    for (int i = 0; i < cc_idx; i++){
+        sparse_table[0][i] = connected_component[i];
+    }
+
+    int expo = floor(log2(cc_idx)) + 1;
+    int e;
+
+    for (int i = 1; i < expo; i++) {
+        for (int j = 0; j + (1 << i) <= cc_idx; j++) {
+            sparse_table[i][j] = lcm(sparse_table[i - 1][j], sparse_table[i - 1][j + (1 << (i - 1))]);
+        }
+    }
+}
+
+int lcm_query(int l, int r) {
+    if (r < l) {
+        return 1;
+    }
+    int len = r - l + 1;
+    int e = floor(log2(len));
+    return lcm(sparse_table[e][l], sparse_table[e][r - (1 << e) + 1]);
+}
+```
 
 <!-- TOC --><a name="graphs"></a>
 ## Graphs
