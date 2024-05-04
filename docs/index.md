@@ -1,4 +1,9 @@
-# Algorithm
+[//]: <> (Ignore)
+# Algorithm 
+
+[//]: <> (Ignore)
+## Table of Contents
+[//]: <> (Inject)
 
 ## Sparse Table
 
