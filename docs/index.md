@@ -6,6 +6,7 @@
 #define FOR(i, L ,R) for (int i = L; i < R; i++)
 #define FOR0(i, N) for (int i = 0; i < N; i++)
 #define endl "\n"
+using ll = long long;
 ```
 
 ```
@@ -19,13 +20,12 @@
 ## Debug
 
 ```
-void Print_Arr(int64_t* _n, int _l) {
+void Print_Arr(ll* _n, int _l) {
     for (int i = 0; i < _l; i++) {
         cout << _n[i] << " ";
     }
     cout << endl;
 }
-int currTC = 0;
 ```
 
 # Algorithm - Basic
@@ -37,29 +37,28 @@ int currTC = 0;
 #define FOR(i, L ,R) for (int i = L; i < R; i++)
 #define FOR0(i, N) for (int i = 0; i < N; i++)
 
-int64_t sparse_table[MAX_EXPO][NC];
+ll sparse_table[MAX_EXPO][NC];
 
-void gen_sparse_table() {
-    for (int i = 0; i < cc_idx; i++){
-        sparse_table[0][i] = connected_component[i];
+void gen_lcm_table() {
+    FOR0(i, cc_idx){
+        sparse_table[0][i] = cc[i];
     }
 
-    int expo = floor(log2(cc_idx)) + 1;
-    int e;
+    ll expo = floor(log2(cc_idx)) + 1;
 
-    for (int i = 1; i < expo; i++) {
+    FOR(i, 1, expo) {
         for (int j = 0; j + (1 << i) <= cc_idx; j++) {
             sparse_table[i][j] = lcm(sparse_table[i - 1][j], sparse_table[i - 1][j + (1 << (i - 1))]);
         }
     }
 }
 
-int lcm_query(int l, int r) {
+ll query(ll l, ll r) {
     if (r < l) {
-        return 1;
+        return 1LL;
     }
-    int len = r - l + 1;
-    int e = floor(log2(len));
+    ll len = r - l + 1;
+    ll e = floor(log2(len));
     return lcm(sparse_table[e][l], sparse_table[e][r - (1 << e) + 1]);
 }
 ```
@@ -159,11 +158,11 @@ for (int k = 0; k < n; k++) {
 
 ### Minimum Spanning Tree
 ```
-using pii = pair<int, int>;
+using pll = pair<ll, ll>;
 typedef struct comp {
     // first = node
     // second = weight
-    bool operator() (pii& lhs, pii& rhs) {
+    bool operator() (pll& lhs, pll& rhs) {
         if (lhs.second != rhs.second) {
             return lhs.second > rhs.second;
         } else {
@@ -176,13 +175,13 @@ typedef struct comp {
 // node : {other_node, weight}
 // MST using Prim
 
-priority_queue<pii, vector<pii>, comp> pq;
+priority_queue<pll, vector<pll>, comp> pq;
 vector<int> visited(points.size(), 0);
 visited[0] = 1;
 for (auto& p : mapping[0]) {
     pq.push(p);
 }
-int res = 0;
+ll res = 0;
 while (!pq.empty()) {
     auto p = pq.top();
     pq.pop();
