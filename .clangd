@@ -1,0 +1,10 @@
+CompileFlags:
+  Add:
+    - std=c++17
+    - std=c17
+    - "-I/Users/francis-hung/Documents/Code/competitive-programming/include"
+    - "-DLOCALONLY"
+
+Diagnostics:
+  Suppress:
+    - two_right_angle_brackets_need_space

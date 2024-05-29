@@ -1,0 +1,103 @@
+{
+	// Place your competitive-programming workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	
+	"Setup IO CPP": {
+		"prefix": "iocpp",
+		"body": [
+			"#include <bits/stdc++.h>",
+			"using namespace std;",
+			"",
+			"/******* Set up *******/",
+			"#define FOR(i, L ,R) for (int i = L; i < R; i++)",
+			"#define FOR0(i, N) for (int i = 0; i < N; i++)",
+			"#define endl \"\\n\"",
+			"using ll=long long;",
+			"using vi = vector<int>;",
+			"using vii = vector<vector<int>>;",
+			"/**********************/",
+			"",
+			"int main() {",
+			"#ifdef LOCALONLY",
+			"    freopen(\"input.txt\", \"r\", stdin);",
+			"    freopen(\"output.txt\", \"w\", stdout);",
+			"#endif",
+			"    int TC;",
+			"    scanf(\"%d\", &TC);",
+			"    while (TC--) { ",
+			"#ifdef LOCALONLY",
+			"    static int _tc_num = 1;",
+			"    cout << \"Testcase \" << _tc_num << \":\\n\";",
+			"    _tc_num++;",
+			"#endif",
+			"",
+			"    }",
+			"    return 0;",
+			"}"
+		],
+		"description": "Setup IO cpp"
+	},
+
+	"Disjoint Set": {
+		"scope": "cpp",
+		"prefix": "dsu",
+		"body": [
+			"class DSU {",
+			"    public:",
+			"        vi parent;",
+			"        vi size;",
+			"        int numSets;",
+			"    public:",
+			"        DSU(int N = 0) : numSets(N) {",
+			"            parent.assign(N, 0);",
+			"            for (int i = 0; i < N; i++) parent[i] = i;",
+			"            size.assign(N, 0);",
+			"        }",
+			"        int find_set(int n) {",
+			"            if (n == parent[n]) return n;",
+			"",
+			"            parent[n] = find_set(parent[n]);",
+			"            return parent[n];",
+			"        }",
+			"",
+			"        void make_set(int v) {",
+			"            parent[v] = v;",
+			"            size[v] = 1;",
+			"        }",
+			"",
+			"        void union_sets(int a, int b) {",
+			"            a = find_set(a);",
+			"            b = find_set(b);",
+			"            if (a == b)  return;",
+			"",
+			"            if (size[a] < size[b]) {",
+			"                parent[a] = b;",
+			"                size[b] += size[a];",
+			"            } else {",
+			"                parent[b] = a;",
+			"                size[a] += size[b];",
+			"            }",
+			"        }",
+			"        ",
+			"        bool is_same(int a, int b) {return find_set(a) == find_set(b);}",
+			"",
+			"};"
+		],
+		"description": "Log output to console"
+	}
+
+}
