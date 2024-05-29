@@ -63,6 +63,42 @@ ll query(ll l, ll r) {
 }
 ```
 
+## Disjoint Set Union
+```
+class DSU {
+    using ll = long long;
+    public:
+        DSU() : parent(), size() {}
+        DSU(ll n) : parent(n, 0), size(n, 0) {}
+        
+        void make_set(ll v) {
+            parent[v] = v;
+            size[v] = 1;
+        }
+
+        ll find_set(ll v) {
+            if (v == parent[v])
+                return v;
+            return parent[v] = find_set(parent[v]);
+        }
+
+        void union_sets(ll a, ll b) {
+            a = find_set(a);
+            b = find_set(b);
+            if (a != b) {
+                if (size[a] < size[b])
+                    swap(a, b);
+                parent[b] = a;
+                size[a] += size[b];
+            }
+        }
+
+    private:
+        vector<ll> parent;
+        vector<ll> size;
+};
+```
+
 # Algorithm - Graphs
 
 ## Shortest Path
@@ -195,3 +231,47 @@ while (!pq.empty()) {
     }
 }
 ```
+
+### Find Bridges in undirected graph
+
+```
+#define LENGTH 100010
+int id;
+map<int, vector<int>> mapping;  // adj list
+int ids[LENGTH];
+int lenId;
+
+int lowLink[LENGTH];
+int lowLinkId;
+
+int visited[LENGTH];
+int vId;
+
+vector<vector<int>> bridges;
+void dfs(int node, int parent) {
+    ids[node] = id;
+    lowLink[node] = id;
+    id++;
+    visited[node] = 1;
+    for (int i : mapping[node]) {
+        if (i == parent) continue;
+        if (visited[i] == 0) {
+            dfs(i, node);
+            lowLink[node] = min(lowLink[node], lowLink[i]);
+            if (ids[node] < lowLink[i]) {
+                bridges.push_back(vector<int>{node, i});
+            }
+        } else {
+            lowLink[node] = min(lowLink[node], ids[i]);
+        }
+    }
+}
+
+id = 0;
+for (int i = 0; i < n; i++) {
+    if (visited[i] == 0) {
+        dfs(i, -1);
+    }
+}
+```
+
