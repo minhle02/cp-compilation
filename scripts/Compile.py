@@ -33,16 +33,22 @@ class Compile:
                         shell=True)
             return output
     
-    def exec(self, path, input: str, output: str):
+    def exec(self, path, input: str, output: str, verbose: bool):
         # input = self.config_parser.GetDefaultInput()
         # output = self.config_parser.GetDefaultOutput()
         abs_path = os.path.abspath(path)
         if platform.system() == 'Windows':
             abs_path = abs_path + '.exe'
         if os.path.exists(abs_path) == True and os.path.isfile(abs_path):
-            subprocess.run([f'{abs_path}'],
+            if verbose == False:
+                subprocess.run([f'{abs_path}'],
                         stdin=open(input, 'r'),
                         stdout=open(output, 'w'),
+                        shell=True)
+            else:
+                # Output to console
+                subprocess.run([f'{abs_path}'],
+                        stdin=open(input, 'r'),
                         shell=True)
         else:
             raise FileNotFoundError
@@ -53,7 +59,7 @@ class Compile:
         else:
             raise FileNotFoundError
     
-    def full_run(self, source_code_path, input, output):
+    def full_run(self, source_code_path, input, output, verbose):
         path = self.compile(source_code_path)
-        self.exec(path, input, output)
+        self.exec(path, input, output, verbose)
         self.remove_bin(path)

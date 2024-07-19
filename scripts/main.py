@@ -19,9 +19,8 @@ def handler_compile(args):
     input = args.input
     output = args.output
     obj = Compile()
-    print("Compile and running.......")
-    obj.full_run(path, input, output)
-    print("Done")
+    verbose = args.verbose
+    obj.full_run(path, input, output, verbose)
     return
 
 def parse_args():
@@ -40,6 +39,7 @@ def parse_args():
     parser_compile.add_argument('file_path', type=str, help='source code input')
     parser_compile.add_argument('-i', '--input', type=str, default=config_parser.GetDefaultInput(), help='Input to program (txt file)')
     parser_compile.add_argument('-o', '--output', type=str, default=config_parser.GetDefaultOutput(), help='where to write output')
+    parser_compile.add_argument('-v', '--verbose', action='store_true')
     parser_compile.set_defaults(func=handler_compile)
 
     return parser.parse_args()
