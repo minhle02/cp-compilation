@@ -1,9 +1,9 @@
 CompileFlags:
   Add:
-    - std=c++17
-    - std=c17
-    - "-I/Users/francis-hung/Documents/Code/competitive-programming/include"
+    - "-std=c++17"
+    - "-I/Users/francis-hung/Documents/Code/Journey-To-CE/competitive-programming/include"
     - "-DLOCALONLY"
+    - "-DDEBUG"
 
 Diagnostics:
   Suppress:

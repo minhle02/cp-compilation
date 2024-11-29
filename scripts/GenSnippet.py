@@ -19,6 +19,7 @@ class GenSnippet:
             for char in special_char:
                 if char in line:
                     line = line.replace(char, '\\' + char)
+            line = "\"" + line + "\"" + ","
             output.append(line)
         ret = '\n'.join(output)
         # pyperclip.copy(ret)

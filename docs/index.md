@@ -3,10 +3,15 @@
 ## Quick type
 
 ```
-#define FOR(i, L ,R) for (int i = L; i < R; i++)
-#define FOR0(i, N) for (int i = 0; i < N; i++)
-#define endl "\n"
 using ll = long long;
+using vl = vector<long long>;
+using vll = vector<vector<long long>>;
+using vi = vector<int>;
+using vii = vector<vector<int>>;
+
+#define FOR(i, L ,R) for (long long i = L; i < R; i++)
+#define FOR0(i, N) for (long long i = 0; i < N; i++)
+#define endl "\n"
 ```
 
 ```
@@ -34,8 +39,6 @@ void Print_Arr(ll* _n, int _l) {
 ```
 #define NC 250010
 #define MAX_EXPO 20
-#define FOR(i, L ,R) for (int i = L; i < R; i++)
-#define FOR0(i, N) for (int i = 0; i < N; i++)
 
 ll sparse_table[MAX_EXPO][NC];
 
@@ -65,38 +68,28 @@ ll query(ll l, ll r) {
 
 ## Disjoint Set Union
 ```
-class DSU {
-    using ll = long long;
-    public:
-        DSU() : parent(), size() {}
-        DSU(ll n) : parent(n, 0), size(n, 0) {}
-        
-        void make_set(ll v) {
-            parent[v] = v;
-            size[v] = 1;
-        }
+vector<ll> parent(51, 0), set_size(51, 0);
 
-        ll find_set(ll v) {
-            if (v == parent[v])
-                return v;
-            return parent[v] = find_set(parent[v]);
-        }
+ll find_set(ll a) {
+    if (parent[a] == a) {
+        return a;
+    }
+    return parent[a] = find_set(parent[a]);
+}
 
-        void union_sets(ll a, ll b) {
-            a = find_set(a);
-            b = find_set(b);
-            if (a != b) {
-                if (size[a] < size[b])
-                    swap(a, b);
-                parent[b] = a;
-                size[a] += size[b];
-            }
+void join_set(ll a, ll b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a != b) {
+        if (set_size[a] < set_size[b]) {
+            parent[a] = b;
+            set_size[b] += set_size[a];
+        } else {
+            parent[b] = a;
+            set_size[a] += set_size[b];
         }
-
-    private:
-        vector<ll> parent;
-        vector<ll> size;
-};
+    }
+}
 ```
 
 # Algorithm - Graphs
@@ -171,19 +164,18 @@ while (!pq.empty()) {
 
 ### All pair shortest path
 ```
-// graph: edge list
 n = graph.size();
-vector<vector<int>> distance(n, vector<int>(n, LIM));
-for (int i = 0; i < n; i++) {
-    for (int j = 0; j < graph[i].size(); j++) {
-        int node = graph[i][j];
+vector<vector<ll>> distance(n, vector<ll>(n, LIM));
+for (ll i = 0; i < n; i++) {
+    for (ll j = 0; j < graph[i].size(); j++) {
+        ll node = graph[i][j];
         distance[i][node] = 1;
         distance[node][i] = 1;
     }
 }
-for (int k = 0; k < n; k++) {
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
+for (ll k = 0; k < n; k++) {
+    for (ll i = 0; i < n; i++) {
+        for (ll j = 0; j < n; j++) {
             if (distance[i][k] + distance[k][j] < distance[i][j]) {
                 distance[i][j] = distance[i][k] + distance[k][j];
             }
@@ -193,6 +185,8 @@ for (int k = 0; k < n; k++) {
 ```
 
 ### Minimum Spanning Tree
+
+Prim's algorithm (lazy version)
 ```
 using pll = pair<ll, ll>;
 typedef struct comp {
@@ -275,3 +269,57 @@ for (int i = 0; i < n; i++) {
 }
 ```
 
+### Find Eulerian Path
+```
+
+```
+### Find Max Flow
+#### Edmonds - Karp Algorithm
+```
+vector<vector<int>> capacity(101, vector<int>(101, 0));
+vector<vector<int>> adjList(101);
+
+int bfs(int s, int t, vector<int>& parent) {
+    fill(parent.begin(), parent.end(), -1);
+    parent[s] = -2;
+    queue<pair<ll, ll>> toVisit;
+    toVisit.push({s, 1000000000});
+    while (!toVisit.empty()) {
+        int curr = toVisit.front().first;
+        int flow = toVisit.front().second;
+        toVisit.pop();
+
+        for (auto& next: adjList[curr]) {
+            if (parent[next] == -1 && capacity[curr][next] > 0) {
+                parent[next] = curr;
+                int new_flow = min(capacity[curr][next], flow);
+                if (next == t) {
+                    return new_flow;
+                }
+                toVisit.push({next, new_flow}); 
+            }
+        }
+    }
+    return 0;
+}
+
+int maxFlow(int s, int t) {
+    int flow = 0;
+    vector<int> parent(N);
+    int new_flow;
+
+    new_flow = bfs(s, t, parent);
+    while (new_flow > 0) {
+        flow += new_flow;
+        int curr = s;
+        while (curr != s) {
+            int prev = parent[curr];
+            capacity[prev][curr] -= new_flow;
+            capacity[curr][prev] += new_flow;
+            curr = prev;
+        }
+        new_flow = bfs(s, t, parent);
+    }
+    return flow;
+}
+```

@@ -1,2 +1,3 @@
-/Users/francis-hung/Documents/Code/competitive-programming/build/__exec__ 
-Hello World
+Jolly
+Not jolly
+Jolly

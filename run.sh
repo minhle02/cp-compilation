@@ -7,4 +7,4 @@ g++ -DLOCALONLY ${moreFlag} ${fileName} -o ${outName}.out
 echo running....
 time ./program.out
 echo finish
-# rm ${outName}.out
+rm ${outName}.out
